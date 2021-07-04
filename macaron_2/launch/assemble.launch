@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <!--  <node 
+	pkg="macaron_2" 
+	type="base_path_generator.py" 
+	name="base_path_generator"/> -->
+
+  <!-- <node 
+	pkg="macaron_2" 
+	type="path_planner.py" 
+	name="path_planner"
+	output="screen"/> -->
+
+  <!--<node 
+	pkg="macaron_2" 
+	type="tm_head.py" 
+	name="tm_head"/>-->
+
+  <node 
+	pkg="macaron_2" 
+	type="serial_node" 
+	name="serial_node"/> 
+  <node 
+	pkg="macaron_2"
+	type="tm_heading.py"
+	name="tm_heading"/>
+
+<!--  <node 
+	pkg="macaron_2" 
+	type="path_tracker" 
+	name="path_tracker"/> -->
+  <node 
+	pkg="macaron_2"
+	type="behavior_level.py"
+	name="behavior_level"/>
+  <node 
+	pkg="macaron_2"
+	type="motion_control_level.py"
+	name="motion_control_level"/>
+  <node 
+	pkg="macaron_2"
+	type="planning_level.py"
+	name="planning_level"/>
+
+</launch>
+

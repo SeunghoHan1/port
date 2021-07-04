@@ -1,0 +1,76 @@
+955787.683703,1951239.525439
+955788.302788,1951238.035597
+955789.272102,1951235.978116
+955790.470609,1951233.841758
+955793.371085,1951231.241498
+955797.323196,1951230.432804
+955799.859477,1951230.752106
+955802.053946,1951231.561347
+955804.109953,1951232.903820
+955805.859591,1951234.758231
+955807.186991,1951236.925511
+955807.792137,1951239.451633
+955807.911163,1951241.902688
+955807.623488,1951244.267159
+955806.912929,1951246.822473
+955805.031536,1951251.735868
+955803.940300,1951254.115711
+955802.831106,1951256.440183
+955801.206969,1951259.910039
+955800.089064,1951262.256744
+955798.909580,1951264.648152
+955797.755585,1951266.850833
+955796.521875,1951269.009564
+955794.996152,1951271.058915
+955792.937970,1951272.622983
+955787.900908,1951273.670425
+955785.336906,1951273.118308
+955783.043118,1951271.899137
+955780.933363,1951270.412738
+955778.998276,1951268.559321
+955778.084157,1951266.057034
+955778.247006,1951263.471355
+955779.098910,1951260.926378
+955781.147602,1951255.923337
+955782.256198,1951253.487930
+955783.417781,1951251.052241
+955784.605976,1951248.638597
+955786.859738,1951244.000554
+955787.845826,1951241.776579
+955788.657657,1951239.997277
+955789.191269,1951239.040384
+955788.239290,1951239.378263
+
+
+def get_kappa(waypoint, sampled_point, dt):
+    sample_num = int(1/dt)
+    kappa = []
+    for i in range(1, waypoint.shape[0]-1):
+        y_1deriv = (sampled_point[i*sample_num + 1, 1] - sampled_point[i*sample_num - 1, 1]) / 2 # forward difference
+        x_1deriv = (sampled_point[i*sample_num + 1, 0] - sampled_point[i*sample_num - 1, 0]) / 2
+        y_2deriv = (sampled_point[i*sample_num + 1, 1] - 2*sampled_point[i*sample_num, 1] + sampled_point[i*sample_num - 1, 1])
+        x_2deriv = (sampled_point[i*sample_num + 1, 0] - 2*sampled_point[i*sample_num, 0] + sampled_point[i*sample_num - 1, 0])
+
+        kappa_ = abs(x_1deriv*y_2deriv - x_2deriv*y_1deriv) / ((x_1deriv**2 + y_1deriv**2)**1.5)
+        kappa.append(kappa_)
+
+    # Get zero and final sequence
+    y_1deriv0 = (sampled_point[1, 1] - sampled_point[0, 1]) / 2 # forward difference
+    x_1deriv0 = (sampled_point[1, 0] - sampled_point[0, 0]) / 2
+        
+    y_2deriv0 = (sampled_point[2, 1] - 2*sampled_point[1, 1] + sampled_point[0, 1]) # Use sequence 1 2nd derivative
+    x_2deriv0 = (sampled_point[2, 0] - 2*sampled_point[1, 0] + sampled_point[0, 0])
+    
+    kappa_0 = abs(x_1deriv0*y_2deriv0 - x_2deriv0*y_1deriv0) / ((x_1deriv0**2 + y_1deriv0**2)**1.5)
+    kappa.insert(0, kappa_0)
+
+    y_1deriv_final = (sampled_point[-1, 1] - sampled_point[-2, 1]) / 2 # backward difference
+    x_1deriv_final = (sampled_point[-1, 0] - sampled_point[-2, 0]) / 2
+                                                               
+    y_2deriv_final = (sampled_point[-3, 1] - 2*sampled_point[-2, 1] + sampled_point[-1, 1]) # Use sequence -2 2nd derivative
+    x_2deriv_final = (sampled_point[-3, 0] - 2*sampled_point[-2, 0] + sampled_point[-1, 0])
+
+    kappa_final = abs(x_1deriv_final*y_2deriv_final - x_2deriv_final*y_1deriv_final) / ((x_1deriv_final**2 + y_1deriv_final**2)**1.5)
+    kappa.append(kappa_final)
+
+    return kappa

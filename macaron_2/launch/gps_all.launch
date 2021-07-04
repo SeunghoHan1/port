@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+	<node pkg="ntrip_ros" type="ntripclient.py" name="ntrip_ros" respawn="true" respawn_delay="30">
+		<param name="rtcm_topic" value="ublox_gps/rtcm"/>
+		<param name="ntrip_server" value="fkp.ngii.go.kr:2201"/>
+		<param name="ntrip_user" value="meng3433"/>
+		<param name="ntrip_pass" value="ngii"/>
+		<param name="ntrip_stream" value="FKP_V31"/>
+		<param name="nmea_gga" value="$GPGGA,..."/>
+	</node>
+
+	<arg name="node_name" value="ublox_gps"/>
+	<arg name="param_file_name" value="zed-f9p"/>
+	<arg name="output" value="screen"/>
+	<arg name="respawn" value="true"/>
+	<arg name="respawn_delay" value="30"/>
+	<arg name="clear_params" value="false"/>
+	<node pkg="ublox_gps" type="ublox_gps" name="$(arg node_name)"
+        output="$(arg output)" 
+        clear_params="$(arg clear_params)"
+        respawn="$(arg respawn)" 
+        respawn_delay="$(arg respawn_delay)">
+    	<rosparam command="load" file="$(find ublox_gps)/config/$(arg param_file_name).yaml" />
+		<param name="device" value="/dev/ttyACM0"/>
+		<param name="uart1/baudrate" value="115200"/>
+  	</node>
+</launch>
+

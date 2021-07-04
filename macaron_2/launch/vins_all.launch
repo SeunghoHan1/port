@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  	<arg name="cam_config" value="$(find vins)/../config/ocams/ocams_stereo_imu_config_lens.yaml" />
+	<node pkg="vins" type="vins_node" name="vins_estimator" args="$(arg cam_config)"/>
+	<node pkg="global_fusion" type="global_fusion_node" name="globalEstimator" output="screen"/>
+	<node pkg="global_fusion" type="gps_tm" name="gps_tm"/>
+	<node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find vins)/../config/vins_rviz_config.rviz" />
+</launch>
+
